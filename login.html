@@ -8,6 +8,8 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
+        console.log('Firebase scripts loaded successfully');
+
         const firebaseConfig = {
             apiKey: "AIzaSyD5KKgtq-2Qd__pn_w6zWUPJpUwtaTw4Fg",
             authDomain: "restaurant-app-fed29.firebaseapp.com",
@@ -19,6 +21,8 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+
+        console.log('Firebase initialized successfully');
 
         window.loginUser = function(event) {
             event.preventDefault();
