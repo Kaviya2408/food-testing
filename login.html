@@ -4,98 +4,13 @@
 	<title>Login Page</title>
 	<link rel="stylesheet" href="style.css">
 	<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-	<script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
-
-        console.log('Firebase scripts loaded successfully');
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyD5KKgtq-2Qd__pn_w6zWUPJpUwtaTw4Fg",
-            authDomain: "restaurant-app-fed29.firebaseapp.com",
-            projectId: "restaurant-app-fed29",
-            storageBucket: "restaurant-app-fed29.firebasestorage.app",
-            messagingSenderId: "613195852332",
-            appId: "1:613195852332:web:aa3a76d763d87cc2a07f89"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-
-        console.log('Firebase initialized successfully');
-
-        window.loginUser = function(event) {
-            event.preventDefault();
-            console.log('Login function called');
-
-            const email = document.querySelector('input[name="email"]').value;
-            const password = document.querySelector('input[name="password"]').value;
-            
-            console.log('Email:', email);
-            console.log('Firebase auth available:', typeof signInWithEmailAndPassword);
-
-            signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    const user = userCredential.user;
-                    console.log('Login successful:', user);
-                    
-                    // Store user in localStorage for session management
-                    localStorage.setItem('currentUser', JSON.stringify({
-                        name: user.displayName || email.split('@')[0],
-                        email: user.email,
-                        uid: user.uid
-                    }));
-                    
-                    alert('Login successful!');
-                    window.location.href = 'index.html';
-                })
-                .catch((error) => {
-                    console.error('Login error:', error);
-                    alert('Login failed: ' + error.message);
-                });
-        }
-    </script>
-	<style>
-		body{
-			padding-top:100px;
-		}
-		.forgot-password{
-			text-align:center;
-			margin-top:15px;
-		}
-		.forgot-password a{
-			color:#ff4500;
-			text-decoration:none;
-			font-size:14px;
-		}
-		.forgot-password a:hover{
-			text-decoration:underline;
-		}
-		.message{
-			text-align:center;
-			padding:10px;
-			margin:10px 0;
-			border-radius:5px;
-		}
-		.success{
-			background-color:#d4edda;
-			color:#155724;
-			border:1px solid #c3e6cb;
-		}
-		.error{
-			background-color:#f8d7da;
-			color:#721c24;
-			border:1px solid #f5c6cb;
-		}
-	</style>
 </head>
 <body>
-
 <div class="form">
 	<h3 class="form-title">LOGIN</h3>
 	<div id="message-container"></div>
 
-	<form class="form-body" onsubmit="loginUser(event)">
+	<form class="form-body" onsubmit="handleLogin(event)">
 		<label>Email:</label>
 		<input type="email" name="email" id="email" required>
 
@@ -119,26 +34,105 @@
 	</div>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js"></script>
 <script>
-function showForgotPassword(e){
-	e.preventDefault();
-	document.getElementById("forgot-form").style.display="block";
-}
+	// Simple Firebase configuration
+	const firebaseConfig = {
+		apiKey: "AIzaSyD5KKgtq-2Qd__pn_w6zWUPJpUwtaTw4Fg",
+		authDomain: "restaurant-app-fed29.firebaseapp.com",
+		projectId: "restaurant-app-fed29",
+		storageBucket: "restaurant-app-fed29.firebasestorage.app",
+		messagingSenderId: "613195852332",
+		appId: "1:613195852332:web:aa3a76d763d87cc2a07f89"
+	};
 
-function showMessage(message,type){
-	const container=document.getElementById("message-container");
-	container.innerHTML=`<div class="message ${type}">${message}</div>`;
-	setTimeout(()=>{container.innerHTML=""},5000);
-}
+	// Initialize Firebase
+	firebase.initializeApp(firebaseConfig);
+	const auth = firebase.auth();
 
-function handleForgotPassword(e){
-	e.preventDefault();
-	const email=document.getElementById('forgot-email').value;
-	
-	// Simple alert for now - Firebase password reset can be added later
-	alert('Password reset functionality will be available soon. Please contact support for password reset.');
-}
+	console.log('Firebase initialized:', auth);
+
+	function handleLogin(event) {
+		event.preventDefault();
+		
+		const email = document.getElementById('email').value;
+		const password = document.getElementById('password').value;
+		
+		console.log('Attempting login with:', email);
+
+		auth.signInWithEmailAndPassword(email, password)
+			.then((userCredential) => {
+				const user = userCredential.user;
+				console.log('Login successful:', user);
+				
+				// Store user in localStorage
+				localStorage.setItem('currentUser', JSON.stringify({
+					name: user.displayName || email.split('@')[0],
+					email: user.email,
+					uid: user.uid
+				}));
+				
+				alert('Login successful!');
+				window.location.href = 'index.html';
+			})
+			.catch((error) => {
+				console.error('Login error:', error);
+				alert('Login failed: ' + error.message);
+			});
+	}
+
+	function showForgotPassword(e){
+		e.preventDefault();
+		document.getElementById("forgot-form").style.display="block";
+	}
+
+	function showMessage(message,type){
+		const container=document.getElementById("message-container");
+		container.innerHTML=`<div class="message ${type}">${message}</div>`;
+		setTimeout(()=>{container.innerHTML=""},5000);
+	}
+
+	function handleForgotPassword(e){
+		e.preventDefault();
+		const email=document.getElementById('forgot-email').value;
+		alert('Password reset functionality will be available soon. Please contact support for password reset.');
+	}
 </script>
+
+<style>
+	body{
+		padding-top:100px;
+	}
+	.forgot-password{
+		text-align:center;
+		margin-top:15px;
+	}
+	.forgot-password a{
+		color:#ff4500;
+		text-decoration:none;
+		font-size:14px;
+	}
+	.forgot-password a:hover{
+		text-decoration:underline;
+	}
+	.message{
+		text-align:center;
+		padding:10px;
+		margin:10px 0;
+		border-radius:5px;
+	}
+	.success{
+		background-color:#d4edda;
+		color:#155724;
+		border:1px solid #c3e6cb;
+	}
+	.error{
+		background-color:#f8d7da;
+		color:#721c24;
+		border:1px solid #f5c6cb;
+	}
+</style>
 
 </body>
 </html>
