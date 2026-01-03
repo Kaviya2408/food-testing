@@ -61,6 +61,7 @@
                 
                 if (currentUser) {
                     const user = JSON.parse(currentUser);
+                    console.log('User found in localStorage:', user);
                     document.getElementById('auth-section').style.display = 'none';
                     document.getElementById('user-section').style.display = 'block';
                     
@@ -70,6 +71,7 @@
                         userNameElement.textContent = user.name;
                     }
                 } else {
+                    console.log('No user found in localStorage');
                     document.getElementById('auth-section').style.display = 'block';
                     document.getElementById('user-section').style.display = 'none';
                 }
