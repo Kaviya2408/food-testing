@@ -9,90 +9,173 @@
         body {
             font-family: 'Poppins', sans-serif;
             margin: 0;
-            padding: 20px;
-            background: #f8f9fa;
+            padding: 24px;
+            background: radial-gradient(1200px 600px at 20% 0%, rgba(255, 69, 0, 0.12), rgba(248, 249, 250, 0)) , #f8f9fa;
         }
-        .profile-container {
-            max-width: 600px;
+        .page {
+            max-width: 900px;
             margin: 0 auto;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .profile-shell {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             overflow: hidden;
         }
-        .profile-header {
+        .profile-hero {
             background: linear-gradient(135deg, #ff4500 0%, #ff6b35 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-        .profile-header h2 {
-            margin: 0;
-            font-size: 24px;
-        }
-        .profile-content {
-            padding: 30px;
-        }
-        .user-info {
-            margin-bottom: 30px;
-        }
-        .user-info h3 {
-            color: #333;
-            margin-bottom: 15px;
-        }
-        .info-item {
+            color: #fff;
+            padding: 28px;
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            padding: 15px 0;
-            border-bottom: 1px solid #eee;
+            gap: 16px;
         }
-        .info-label {
-            font-weight: bold;
-            color: #666;
+        .hero-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
         }
-        .info-value {
-            color: #333;
+        .avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.18);
+            border: 2px solid rgba(255,255,255,0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 20px;
+            backdrop-filter: blur(6px);
         }
-        .back-btn {
-            background: #6c757d;
-            color: white;
+        .hero-title {
+            margin: 0;
+            font-size: 22px;
+            line-height: 1.2;
+        }
+        .hero-sub {
+            margin: 6px 0 0;
+            opacity: 0.9;
+            font-size: 13px;
+        }
+        .hero-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+        .btn {
             border: none;
-            padding: 12px 24px;
-            border-radius: 5px;
+            border-radius: 10px;
+            padding: 10px 14px;
             cursor: pointer;
-            font-size: 16px;
-            margin-top: 20px;
-            width: 100%;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
-        .back-btn:hover {
-            background: #5a6268;
+        .btn-light {
+            background: rgba(255,255,255,0.92);
+            color: #1f2937;
+        }
+        .btn-light:hover {
+            background: #ffffff;
+        }
+        .btn-dark {
+            background: rgba(0,0,0,0.22);
+            color: #ffffff;
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+        .btn-dark:hover {
+            background: rgba(0,0,0,0.28);
+        }
+        .content {
+            padding: 22px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+        .card {
+            border: 1px solid #eef0f3;
+            border-radius: 14px;
+            padding: 18px;
+        }
+        .card h3 {
+            margin: 0 0 12px;
+            font-size: 16px;
+            color: #111827;
+        }
+        .rows {
+            display: grid;
+            gap: 10px;
+        }
+        .row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 12px 12px;
+            border-radius: 12px;
+            background: #fafafa;
+        }
+        .label {
+            color: #6b7280;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .value {
+            color: #111827;
+            font-weight: 600;
+            font-size: 13px;
+            text-align: right;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 60%;
         }
     </style>
 </head>
 <body>
-    <div class="profile-container">
-        <div class="profile-header">
-            <h2>My Profile</h2>
-        </div>
-
-        <div class="profile-content">
-            <div class="user-info">
-                <h3>Account Information</h3>
-                <div class="info-item">
-                    <span class="info-label">Name:</span>
-                    <span class="info-value" id="user-name">Loading...</span>
+    <div class="page">
+        <div class="profile-shell">
+            <div class="profile-hero">
+                <div class="hero-left">
+                    <div class="avatar" id="avatar">U</div>
+                    <div>
+                        <h2 class="hero-title" id="hero-title">My Profile</h2>
+                        <div class="hero-sub" id="hero-sub">Account details</div>
+                    </div>
                 </div>
-                <div class="info-item">
-                    <span class="info-label">Email:</span>
-                    <span class="info-value" id="user-email">Loading...</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">User ID:</span>
-                    <span class="info-value" id="user-id">Loading...</span>
+                <div class="hero-actions">
+                    <a class="btn btn-dark" href="index.html">Home</a>
+                    <a class="btn btn-light" id="admin-btn" href="admin.html" style="display:none;">Admin</a>
                 </div>
             </div>
 
-            <a href="index.html" class="back-btn">Back to Home</a>
+            <div class="content">
+                <div class="card">
+                    <h3>Account Information</h3>
+                    <div class="rows">
+                        <div class="row">
+                            <div class="label">Name</div>
+                            <div class="value" id="user-name">Loading...</div>
+                        </div>
+                        <div class="row">
+                            <div class="label">Email</div>
+                            <div class="value" id="user-email">Loading...</div>
+                        </div>
+                        <div class="row">
+                            <div class="label">User ID</div>
+                            <div class="value" id="user-id">Loading...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <a class="btn btn-light" href="index.html">Back to Home</a>
+            </div>
         </div>
     </div>
 
@@ -105,6 +188,15 @@
             document.getElementById('user-name').textContent = user.name || 'Not available';
             document.getElementById('user-email').textContent = user.email || 'Not available';
             document.getElementById('user-id').textContent = user.uid || 'Not available';
+
+            const initial = (user.name || user.email || 'U').trim().charAt(0).toUpperCase();
+            document.getElementById('avatar').textContent = initial;
+            document.getElementById('hero-title').textContent = user.name || 'My Profile';
+            document.getElementById('hero-sub').textContent = user.email || 'Account details';
+
+            if (user.email === 'kit27.csbs29@gmail.com') {
+                document.getElementById('admin-btn').style.display = 'inline-flex';
+            }
         }
     </script>
 </body>

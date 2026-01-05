@@ -124,6 +124,11 @@
         .refresh-btn:hover {
             background: #ff6b35;
         }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -154,8 +159,25 @@
 
         // Load and display orders
         function loadOrders() {
-            const orders = JSON.parse(localStorage.getItem('orders') || '[]');
             const container = document.getElementById('orders-container');
+
+            let orders = [];
+            try {
+                const raw = localStorage.getItem('orders');
+                orders = raw ? JSON.parse(raw) : [];
+                if (!Array.isArray(orders)) {
+                    orders = [];
+                }
+            } catch (e) {
+                container.innerHTML = `
+                    <div class="no-orders">
+                        <h3>Could not load orders</h3>
+                        <p>Orders data in this browser is corrupted.</p>
+                        <button class="refresh-btn" onclick="localStorage.removeItem('orders'); loadOrders()">Clear Orders Data</button>
+                    </div>
+                `;
+                return;
+            }
             
             if (orders.length === 0) {
                 container.innerHTML = `
@@ -223,9 +245,9 @@
 
         // Auto-refresh orders every 30 seconds
         setInterval(loadOrders, 30000);
-        
+
         // Initial load
-        loadOrders();
+        window.addEventListener('DOMContentLoaded', () => loadOrders());
     </script>
 </body>
 </html>
