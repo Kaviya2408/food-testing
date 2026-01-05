@@ -70,6 +70,21 @@
                     if (userNameElement) {
                         userNameElement.textContent = user.name;
                     }
+                    
+                    // Add Admin link only for admin
+                    const dropdownMenu = document.getElementById('dropdown-menu');
+                    if (user.email === 'kit27.csbs29@gmail.com') {
+                        dropdownMenu.innerHTML = `
+                            <a href="/admin">Admin</a>
+                            <a href="/profile">Profile</a>
+                            <a href="#" onclick="logout()">Logout</a>
+                        `;
+                    } else {
+                        dropdownMenu.innerHTML = `
+                            <a href="/profile">Profile</a>
+                            <a href="#" onclick="logout()">Logout</a>
+                        `;
+                    }
                 } else {
                     console.log('No user found in localStorage');
                     document.getElementById('auth-section').style.display = 'block';
