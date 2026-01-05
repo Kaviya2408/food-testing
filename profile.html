@@ -92,10 +92,50 @@
         <div class="upload-section">
             <form id="avatarForm" action="/upload-avatar" method="post" enctype="multipart/form-data">
                 <input type="file" id="avatar" name="avatar" accept="image/*" onchange="uploadAvatar(event)">
-                <label for="avatar" class="upload-label">Change Avatar</label>
-                <div id="upload-status" style="margin-top: 10px; color: #28a745; font-size: 14px;"></div>
-            </form>
-        </div>
+                <label for="avatar" class="upload-label">Change Avatar
+                <script>
+        // Check if user is logged in
+        const currentUser = localStorage.getItem('currentUser');
+        if (!currentUser) {
+            document.body.innerHTML = `
+                <div style="text-align: center; padding: 100px; color: #ff4500;">
+                    <h2>Please Login First</h2>
+                    <p>You need to login to view your profile.</p>
+                    <button onclick="window.location.href='login.html'" style="background: #ff4500; color: white; border: none; padding: 12px 24px; border-radius: 5px; cursor: pointer;">Go to Login</button>
+                </div>
+            `;
+            return;
+        }
+
+        // Load user data directly from localStorage (no backend call)
+        const user = JSON.parse(currentUser);
+        
+        // Display user information
+        document.getElementById('user-name').textContent = user.name || 'Not available';
+        document.getElementById('user-email').textContent = user.email || 'Not available';
+        document.getElementById('user-id').textContent = user.uid || 'Not available';
+
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+    </script>
+                // Update avatar
+                const avatarImg = document.getElementById('avatar-img');
+                const avatarInitial = document.getElementById('avatar-initial');
+                
+                if (user.avatar) {
+                    avatarImg.src = `/uploads/${user.avatar}`;
+                    avatarImg.style.display = 'block';
+                    avatarInitial.style.display = 'none';
+                } else {
+                    avatarInitial.textContent = user.name.charAt(0).toUpperCase();
+                    avatarInitial.style.display = 'flex';
+                }
+                
+            </label>
+            <div id="upload-status" style="margin-top: 10px; color: #28a745; font-size: 14px;"></div>
+        </form>
+    </div>
         
         <a href="index.html" class="back-btn">Back to Home</a>
     </div>
