@@ -124,11 +124,6 @@
         .refresh-btn:hover {
             background: #ff6b35;
         }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
     </style>
 </head>
 <body>
@@ -138,8 +133,10 @@
     </div>
 
     <div class="orders-container" id="orders-container">
-        <div style="text-align: center; padding: 40px;">
-            <div style="display: inline-block; animation: spin 1s linear infinite;">Loading orders...</div>
+        <div class="no-orders">
+            <h3>No orders received yet</h3>
+            <p>Orders will appear here when customers place them.</p>
+            <button class="refresh-btn" onclick="loadOrders()">🔄 Refresh Orders</button>
         </div>
     </div>
 
