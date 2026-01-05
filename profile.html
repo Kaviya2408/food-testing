@@ -57,24 +57,25 @@
         .card {
             background: #ffffff;
             border-radius: 14px;
-            padding: 18px;
+            padding: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            border: 1px solid #f0f0f0;
         }
         .card h3 {
-            margin: 0 0 12px;
+            margin: 0 0 14px;
             font-size: 15px;
             color: #111827;
         }
         .rows {
             display: grid;
-            gap: 10px;
+            gap: 12px;
         }
         .row {
             display: grid;
             grid-template-columns: 120px 1fr;
-            align-items: center;
+            align-items: start;
             gap: 16px;
-            padding: 12px 12px;
+            padding: 14px 14px;
             border-radius: 12px;
             background: #fafafa;
             border: 1px solid #f0f0f0;
@@ -83,6 +84,7 @@
             color: #6b7280;
             font-weight: 700;
             font-size: 13px;
+            padding-top: 2px;
         }
         .value {
             color: #111827;
@@ -93,6 +95,7 @@
             overflow-wrap: anywhere;
             word-break: break-word;
             white-space: normal;
+            min-width: 0;
         }
         @media (max-width: 480px) {
             .row {
