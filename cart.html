@@ -355,30 +355,49 @@
             const deliveryFee = 40;
             const total = subtotal + deliveryFee;
             
-            // Store order in localStorage
-            const orders = JSON.parse(localStorage.getItem('orders') || '[]');
-            orders.push({
+            // Create order object
+            const order = {
                 customerName,
                 customerPhone,
                 customerAddress,
-                orderItems: cart,
+                orderItems: [...cart],
                 subtotal,
                 deliveryFee,
                 total,
                 timestamp: new Date().toISOString()
-            });
-            localStorage.setItem('orders', JSON.stringify(orders));
+            };
             
-            // Send order as NORMAL SMS to restaurant owner
-            const smsMessage = `NEW ORDER: ${customerName}, ${customerPhone}, ${customerAddress}, Total: ₹${total}`;
+            console.log('Order object:', order);
             
-            // Create SMS link to send to your number
-            const smsUrl = `sms:8072007223?body=${encodeURIComponent(smsMessage)}`;
+            // Get existing orders
+            let orders = [];
+            try {
+                const existing = localStorage.getItem('orders');
+                orders = existing ? JSON.parse(existing) : [];
+                console.log('Existing orders:', orders);
+            } catch (e) {
+                console.error('Error reading existing orders:', e);
+                orders = [];
+            }
             
-            // Open SMS automatically
-            window.open(smsUrl, '_blank');
+            // Add new order
+            orders.push(order);
             
-            // ALSO send to backend server if running locally
+            // Save to localStorage
+            try {
+                localStorage.setItem('orders', JSON.stringify(orders));
+                console.log('Orders saved to localStorage:', orders);
+                
+                // Verify it was saved
+                const saved = localStorage.getItem('orders');
+                console.log('Verified saved orders:', saved);
+            } catch (e) {
+                console.error('Error saving orders:', e);
+                alert('Error saving order. Please try again.');
+                return;
+            }
+            
+            // Send to backend server if running locally
             if (window.location.hostname === 'localhost') {
                 try {
                     fetch('http://localhost:3000/send-order', {
@@ -386,15 +405,7 @@
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify({
-                            customerName,
-                            customerPhone,
-                            customerAddress,
-                            orderItems: cart,
-                            subtotal,
-                            deliveryFee,
-                            total
-                        })
+                        body: JSON.stringify(order)
                     })
                     .then(response => response.json())
                     .then(data => {
@@ -407,30 +418,6 @@
                     console.log('Fetch failed:', error);
                 }
             }
-            
-            // Show success to customer
-            alert('Order placed successfully! Please click "Send SMS" to notify restaurant.');
-            
-            // Create popup with ONE-CLICK SMS send
-            const orderDiv = document.createElement('div');
-            orderDiv.innerHTML = `
-                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10000; display: flex; align-items: center; justify-content: center;">
-                    <div style="background: white; padding: 30px; border-radius: 10px; max-width: 500px; max-height: 80vh; overflow-y: auto; text-align: center;">
-                        <h2 style="color: #ff4500; margin-bottom: 20px;">🍽️ ORDER READY TO SEND</h2>
-                        <p style="font-size: 16px; margin-bottom: 20px;">Click the button below to automatically send your order to the restaurant via SMS.</p>
-                        <div style="background: #007bff; color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                            <h3 style="margin: 0;">📱 SMS Ready</h3>
-                            <p style="margin: 10px 0 0 0;">Your order details are prepared and ready to send to the restaurant.</p>
-                        </div>
-                        <button onclick="window.open('sms:8072007223?body=${encodeURIComponent(smsMessage)}', '_blank'); this.parentElement.parentElement.parentElement.remove();" 
-                                style="background: #007bff; color: white; border: none; padding: 15px 30px; border-radius: 5px; cursor: pointer; font-size: 18px; font-weight: bold; width: 100%; margin-bottom: 10px;">
-                            📱 SEND ORDER TO RESTAURANT
-                        </button>
-                        <p style="font-size: 12px; color: #666;">This will open your SMS app with the order ready to send</p>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(orderDiv);
             
             // Clear cart
             cart = [];
@@ -445,6 +432,9 @@
             document.getElementById('customerName').value = '';
             document.getElementById('customerPhone').value = '';
             document.getElementById('customerAddress').value = '';
+            
+            // Show success message
+            alert(`Order placed successfully!\n\nRestaurant will contact you at:\n📞 +91 8072007223\n\nYour order details have been sent to the admin panel.`);
         }
         
         // Initialize cart

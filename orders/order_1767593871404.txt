@@ -1,0 +1,17 @@
+🍽️ NEW ORDER RECEIVED 🍽️
+
+👤 Customer Details:
+Name: Kaviya k
+Phone: 08072007223
+Address: 2/47 mariamman kovil street
+
+🛒 Order Items:
+Experience the fiery taste of our Dragon Chicken, a perfect
+                                    Indo-Chinese delight Chicken - ₹220 x 1 = ₹220
+
+💰 Payment Details:
+Subtotal: ₹220
+Delivery Fee: ₹40
+Total Amount: ₹260
+
+📞 Contact Customer: 08072007223

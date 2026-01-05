@@ -6,25 +6,30 @@
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
 
         <style>
-            body {
-                margin: 0;
-                padding: 0;
-                overflow-y: auto; 
-                background-color: black;
-                color: whitesmoke;
+           body{
+            margin:0;
+            padding:0;
+            min-height:100vh;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            background-color:black;
+            color:whitesmoke;
             }
+
             .menutitle {
                 text-align: center;
                 margin: 20px 0;
             }
-            .menucont {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 30px;
-                max-width: 400px;
-                margin: 0 auto;
-            }
+            .menucont{
+                display:flex;
+                flex-direction:column;
+                align-items:center;
+                gap:30px;
+                width:100%;
+                max-width:400px;
+                }
+
             .menu-item {
                 text-align: center;
                 width: 100%;
@@ -48,6 +53,7 @@
                 margin-right: auto;
             }
             .menu-item h5 {
+                text-align: center;
                 margin: 10px 0;
                 font-size: 1.3em;
             }
@@ -88,6 +94,14 @@
                 justify-content: center;
                 font-size: 12px;
             }
+            .menu-wrapper{
+            margin-right: 630px;
+            width:100%;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            }
+
         </style>
     </head>
     <body>
@@ -95,10 +109,10 @@
             <i class="fas fa-shopping-cart"></i>
             <span class="cart-count" id="cart-count">0</span>
         </div>
-        
         <div class="menutitle">
             <h2>OUR MENU <i class="fas fa-utensils"></i></h2>
         </div>
+        <div class="menu-wrapper">
         <div class="menucont">
             <div class="mimg-1 menu-item">
                 <img src="./pexels-enginakyurt-2673353.jpg">
@@ -106,7 +120,7 @@
                 <p>Price: ₹250</p>
             </div>
             <div class="mimg-2 menu-item">
-                <img src="./b922edc0-9444-41c4-af44-531b1f96f8aa_39a490f0-bde3-4c4e-943f-c3544c1eff7b.JPG">
+                <img src="./pexels-ramazphotos-31651635.jpg">
                 <h5><a href="mcurry.html"> Mutton Curry</a></h5>
                 <p>Price: ₹350</p>
             </div>
@@ -121,7 +135,7 @@
                 <p>Price: ₹180</p>
             </div>
         </div>
-        
+        </div>
         <script>
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         

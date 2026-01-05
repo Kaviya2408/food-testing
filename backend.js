@@ -253,6 +253,18 @@ app.post('/send-order', (req, res) => {
     });
 });
 
+// GET ALL ORDERS - for admin panel
+app.get('/orders',(req,res)=>{
+    const sql="SELECT * FROM orders ORDER BY id DESC"
+    db.query(sql,(err,results)=>{
+        if(err){
+            console.log('Error fetching orders:', err)
+            return res.status(500).json({error:'Database error'})
+        }
+        res.json(results)
+    })
+})
+
 // FORGOT PASSWORD - Simple version
 app.post('/forgot-password',(req,res)=>{
     const{email}=req.body

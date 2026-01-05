@@ -2,167 +2,186 @@
 <html>
 <head>
     <title>User Profile</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=20250105">
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Poppins', sans-serif;
             margin: 0;
-            padding: 24px;
-            background: #f8f9fa;
-        }
-        .page {
-            max-width: 720px;
-            margin: 0 auto;
-            min-height: calc(100vh - 48px);
-            display: grid;
-            align-content: center;
-            gap: 14px;
-        }
-        .header {
-            background: #ffffff;
-            border-radius: 14px;
-            padding: 16px 18px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            border-left: 5px solid #ff4500;
-        }
-        .title {
-            display: grid;
-            gap: 2px;
-        }
-        .title h2 {
-            margin: 0;
-            font-size: 18px;
-            color: #111827;
-        }
-        .title p {
-            margin: 0;
-            font-size: 12px;
-            color: #6b7280;
-        }
-        .role-badge {
-            font-size: 12px;
-            font-weight: 700;
-            padding: 6px 10px;
-            border-radius: 999px;
-            background: rgba(255, 69, 0, 0.12);
-            color: #ff4500;
-            white-space: nowrap;
-        }
-        .card {
-            background: #ffffff;
-            border-radius: 14px;
             padding: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
-            border: 1px solid #f0f0f0;
-        }
-        .card h3 {
-            margin: 0 0 14px;
-            font-size: 15px;
-            color: #111827;
-        }
-        .rows {
-            display: grid;
-            gap: 12px;
-        }
-        .row {
-            display: grid;
-            grid-template-columns: 120px 1fr;
-            align-items: start;
-            gap: 16px;
-            padding: 14px 14px;
-            border-radius: 12px;
-            background: #fafafa;
-            border: 1px solid #f0f0f0;
-        }
-        .label {
-            color: #6b7280;
-            font-weight: 700;
-            font-size: 13px;
-            padding-top: 2px;
-        }
-        .value {
-            color: #111827;
-            font-weight: 600;
-            font-size: 13px;
-            text-align: right;
-            justify-self: end;
-            overflow-wrap: anywhere;
-            word-break: break-word;
-            white-space: normal;
-            min-width: 0;
-        }
-        @media (max-width: 480px) {
-            .row {
-                grid-template-columns: 96px 1fr;
-            }
-        }
-        .actions {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
             display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .btn {
-            border: none;
-            border-radius: 10px;
-            padding: 10px 14px;
-            cursor: pointer;
-            font-size: 14px;
-            text-decoration: none;
-            display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+        }
+        .profile-card {
             background: #ffffff;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+            padding: 40px;
+            max-width: 480px;
+            width: 100%;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .profile-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff4500 0%, #ff6b35 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 700;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 24px rgba(255,69,0,0.2);
+        }
+        .profile-name {
+            font-size: 24px;
+            font-weight: 700;
             color: #111827;
+            margin: 0 0 8px;
+        }
+        .profile-email {
+            font-size: 14px;
+            color: #6b7280;
+            margin: 0;
+        }
+        .role-badge {
+            display: inline-block;
+            background: rgba(255,69,0,0.1);
+            color: #ff4500;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin: 20px 0;
+            border: 1px solid rgba(255,69,0,0.2);
+        }
+        .details-section {
+            margin-top: 32px;
+        }
+        .details-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #111827;
+            margin: 0 0 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 16px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+        .detail-label {
+            font-size: 13px;
+            color: #6b7280;
+            font-weight: 600;
+            flex: 0 0 80px;
+        }
+        .detail-value {
+            font-size: 13px;
+            color: #111827;
+            font-weight: 600;
+            text-align: right;
+            flex: 1;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+        }
+        .actions {
+            margin-top: 32px;
+            display: flex;
+            gap: 12px;
+        }
+        .btn {
+            flex: 1;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
         }
         .btn-primary {
-            background: #ff4500;
-            color: #ffffff;
+            background: linear-gradient(135deg, #ff4500 0%, #ff6b35 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(255,69,0,0.2);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255,69,0,0.3);
+        }
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #6b7280;
+            border: 1px solid #e9ecef;
+        }
+        .btn-secondary:hover {
+            background: #e9ecef;
+            color: #495057;
+        }
+        .btn-admin {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(40,167,69,0.2);
+        }
+        .btn-admin:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(40,167,69,0.3);
         }
     </style>
 </head>
 <body>
-    <div class="page">
-        <div class="header">
-            <div class="title">
-                <h2 id="profile-title">Profile</h2>
-                <p id="profile-subtitle">User details</p>
-            </div>
+    <div class="profile-card">
+        <div class="profile-header">
+            <div class="avatar" id="avatar">U</div>
+            <h1 class="profile-name" id="profile-name">Loading...</h1>
+            <p class="profile-email" id="profile-email">Loading...</p>
             <div class="role-badge" id="role-badge">USER</div>
         </div>
 
-        <div class="card">
-            <h3>User Details</h3>
-            <div class="rows">
-                <div class="row">
-                    <div class="label">Role</div>
-                    <div class="value" id="role-text">USER</div>
-                </div>
-                <div class="row">
-                    <div class="label">Name</div>
-                    <div class="value" id="user-name">Loading...</div>
-                </div>
-                <div class="row">
-                    <div class="label">Email</div>
-                    <div class="value" id="user-email">Loading...</div>
-                </div>
-                <div class="row">
-                    <div class="label">User ID</div>
-                    <div class="value" id="user-id">Loading...</div>
-                </div>
+        <div class="details-section">
+            <h2 class="details-title">Account Details</h2>
+            
+            <div class="detail-item">
+                <div class="detail-label">Role</div>
+                <div class="detail-value" id="role-text">USER</div>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">Name</div>
+                <div class="detail-value" id="user-name">Loading...</div>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">Email</div>
+                <div class="detail-value" id="user-email">Loading...</div>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">User ID</div>
+                <div class="detail-value" id="user-id">Loading...</div>
             </div>
         </div>
 
         <div class="actions">
-            <a class="btn" href="index.html">Home</a>
-            <a class="btn btn-primary" id="admin-btn" href="admin.html" style="display:none;">Admin</a>
+            <a href="index.html" class="btn btn-secondary">Home</a>
+            <a href="admin.html" class="btn btn-admin" id="admin-btn" style="display: none;">Admin</a>
         </div>
     </div>
 
@@ -172,19 +191,27 @@
             window.location.href = 'login.html';
         } else {
             const user = JSON.parse(currentUser);
+            
+            // Update profile header
+            const initial = (user.name || user.email || 'U').trim().charAt(0).toUpperCase();
+            document.getElementById('avatar').textContent = initial;
+            document.getElementById('profile-name').textContent = user.name || 'User';
+            document.getElementById('profile-email').textContent = user.email || 'No email';
+            
+            // Update details
             document.getElementById('user-name').textContent = user.name || 'Not available';
             document.getElementById('user-email').textContent = user.email || 'Not available';
             document.getElementById('user-id').textContent = user.uid || 'Not available';
-
+            
+            // Update role
             const isAdmin = user.email === 'kit27.csbs29@gmail.com';
             const role = isAdmin ? 'ADMIN' : 'USER';
             document.getElementById('role-text').textContent = role;
             document.getElementById('role-badge').textContent = role;
-            document.getElementById('profile-title').textContent = user.name ? user.name : 'Profile';
-            document.getElementById('profile-subtitle').textContent = user.email ? user.email : 'User details';
-
+            
+            // Show admin button for admin
             if (isAdmin) {
-                document.getElementById('admin-btn').style.display = 'inline-flex';
+                document.getElementById('admin-btn').style.display = 'block';
             }
         }
     </script>
