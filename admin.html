@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Restaurant Admin - Orders Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+        .admin-header {
+            background: linear-gradient(135deg, #ff4500 0%, #ff6b35 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .admin-header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .admin-header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+        }
+        .orders-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .order-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-left: 5px solid #ff4500;
+        }
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .order-id {
+            font-weight: bold;
+            color: #ff4500;
+        }
+        .order-time {
+            color: #666;
+            font-size: 14px;
+        }
+        .customer-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .customer-info h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .order-items {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .order-items h4 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .item-name {
+            flex: 1;
+        }
+        .item-quantity {
+            color: #666;
+            font-size: 14px;
+        }
+        .item-price {
+            font-weight: bold;
+            color: #ff4500;
+        }
+        .order-total {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: right;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .status-new {
+            background: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+        }
+        .no-orders {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+        .refresh-btn {
+            background: #ff4500;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        .refresh-btn:hover {
+            background: #ff6b35;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-header">
+        <h1>🍽️ Restaurant Admin Dashboard</h1>
+        <p>Orders Management System</p>
+    </div>
+
+    <div class="orders-container" id="orders-container">
+        <div style="text-align: center; padding: 40px;">
+            <div style="display: inline-block; animation: spin 1s linear infinite;">Loading orders...</div>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is admin
+        const currentUser = localStorage.getItem('currentUser');
+        if (!currentUser || !JSON.parse(currentUser).email === 'kotkit27.csbs29@gmail.com') {
+            document.body.innerHTML = `
+                <div style="text-align: center; padding: 100px; color: #ff4500;">
+                    <h2>🚫 Access Denied</h2>
+                    <p>You need admin privileges to access this page.</p>
+                    <p><a href="login.html" style="color: #ff4500;">Go to Login</a></p>
+                </div>
+            `;
+            return;
+        }
+
+        // Load and display orders
+        function loadOrders() {
+            const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+            const container = document.getElementById('orders-container');
+            
+            if (orders.length === 0) {
+                container.innerHTML = `
+                    <div class="no-orders">
+                        <h3>No orders received yet</h3>
+                        <p>Orders will appear here when customers place them.</p>
+                        <button class="refresh-btn" onclick="loadOrders()">🔄 Refresh Orders</button>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort orders by timestamp (newest first)
+            orders.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            
+            let html = '';
+            orders.forEach((order, index) => {
+                const orderDate = new Date(order.timestamp);
+                const timeAgo = getTimeAgo(orderDate);
+                const isNew = (Date.now() - orderDate.getTime()) < 60000; // Less than 1 minute
+                
+                html += `
+                    <div class="order-card">
+                        <div class="order-header">
+                            <div class="order-id">Order #${orders.length - index}</div>
+                            <div class="order-time">${orderDate.toLocaleString()} ${isNew ? '<span class="status-new">NEW</span>' : ''}</div>
+                        </div>
+                        
+                        <div class="customer-info">
+                            <h3>👤 Customer Information</h3>
+                            <p><strong>Name:</strong> ${order.customerName}</p>
+                            <p><strong>Phone:</strong> ${order.customerPhone}</p>
+                            <p><strong>Address:</strong> ${order.customerAddress}</p>
+                        </div>
+                        
+                        <div class="order-items">
+                            <h4>🛒 Order Items</h4>
+                            ${order.orderItems.map(item => `
+                                <div class="item">
+                                    <div class="item-name">${item.name}</div>
+                                    <div class="item-quantity">x${item.quantity}</div>
+                                    <div class="item-price">₹${item.price * item.quantity}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="order-total">
+                            Total: ₹${order.total}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function getTimeAgo(date) {
+            const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+            
+            if (seconds < 60) return 'Just now';
+            if (seconds < 3600) return Math.floor(seconds / 60) + ' minutes ago';
+            if (seconds < 86400) return Math.floor(seconds / 3600) + ' hours ago';
+            return Math.floor(seconds / 86400) + ' days ago';
+        }
+
+        // Auto-refresh orders every 30 seconds
+        setInterval(loadOrders, 30000);
+        
+        // Initial load
+        loadOrders();
+    </script>
+</body>
+</html>
