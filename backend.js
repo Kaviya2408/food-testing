@@ -20,7 +20,8 @@ app.use(express.json());
 app.use(express.static(__dirname));
 
 // MongoDB connection with cloud/local config
-const db = mongoose.createConnection(dbConfig());
+const { getConfig, getMongoURI } = dbConfig;
+const db = mongoose.createConnection(getMongoURI(getConfig()));
 
 // Order schema for MongoDB
 const orderSchema = new mongoose.Schema({
@@ -151,7 +152,7 @@ function startServer() {
 }
 
 // Connect to MongoDB and start server
-mongoose.connect(dbConfig().uri, {
+mongoose.connect(getMongoURI(getConfig()), {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => {
