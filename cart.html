@@ -400,7 +400,7 @@
             // Send to backend server if running locally
             if (window.location.hostname === 'localhost') {
                 try {
-                    fetch('http://localhost:3000/send-order', {
+                    fetch('http://10.23.240.23:3000/send-order', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
