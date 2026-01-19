@@ -37,6 +37,10 @@ Database
 
 MongoDB / JSON based storage (depending on setup)
 
+![Homepage Preview](Screenshot%202026-01-19%20112507.png)
+
+
+
 📂 Project Structure
 restaurant/
 │
