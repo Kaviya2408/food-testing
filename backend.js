@@ -19,10 +19,6 @@ app.use(express.json());
 // Serve static files (HTML, CSS, JS, images)
 app.use(express.static(__dirname));
 
-// MongoDB connection with cloud/local config
-const { getConfig, getMongoURI } = dbConfig;
-const db = mongoose.createConnection(getMongoURI(getConfig()));
-
 // Order schema for MongoDB
 const orderSchema = new mongoose.Schema({
     customer_name: { type: String, required: true },
@@ -125,52 +121,25 @@ function startServer() {
         });
     });
 
+    
     // Delete single order endpoint
     app.delete('/orders/:id', async (req, res) => {
         try {
             const orderId = req.params.id;
             
             console.log(`🔍 DELETE request received for order ID: ${orderId}`);
-            console.log(`🔍 Order ID type: ${typeof orderId}`);
-            console.log(`🔍 Order ID length: ${orderId ? orderId.length : 'undefined'}`);
-            
+
             if (!orderId) {
-                console.log(`❌ Invalid order ID: ${orderId}`);
                 return res.status(400).json({ error: 'Invalid order ID' });
             }
-            
-            // Check if Order model is available
-            console.log(`🔍 Order model available: ${!!Order}`);
-            
-            // Try to find the order first to see if it exists
-            let deleteQuery;
-            try {
-                const ObjectId = require('mongoose').Types.ObjectId;
-                deleteQuery = { _id: new ObjectId(orderId) };
-                console.log(`🔍 Using ObjectId query:`, deleteQuery);
-            } catch (e) {
-                console.log(`🔍 ObjectId conversion failed, using string ID: ${orderId}`);
-                console.log(`🔍 ObjectId conversion error:`, e.message);
-                deleteQuery = { _id: orderId };
+
+            const { Types } = require('mongoose');
+            if (!Types.ObjectId.isValid(orderId)) {
+                return res.status(400).json({ error: 'Invalid order ID format' });
             }
-            
-            console.log(`🔍 Final delete query:`, deleteQuery);
-            
-            // Try to find the order first
-            const existingOrder = await Order.findOne(deleteQuery);
-            console.log(`🔍 Existing order found:`, existingOrder);
-            
-            if (!existingOrder) {
-                console.log(`❌ Order not found with ID: ${orderId}`);
-                return res.status(404).json({ error: 'Order not found' });
-            }
-            
-            // Delete the order
-            const result = await Order.findOneAndDelete(deleteQuery);
-            console.log(`🔍 Delete result:`, result);
-            
+
+            const result = await Order.findByIdAndDelete(orderId);
             if (!result) {
-                console.log(`❌ Delete failed for order ID: ${orderId}`);
                 return res.status(404).json({ error: 'Order not found' });
             }
             
@@ -196,6 +165,7 @@ function startServer() {
 }
 
 // Connect to MongoDB and start server
+const { getConfig, getMongoURI } = dbConfig;
 mongoose.connect(getMongoURI(getConfig()), {
     useNewUrlParser: true,
     useUnifiedTopology: true
