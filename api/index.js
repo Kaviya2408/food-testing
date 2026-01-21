@@ -171,3 +171,6 @@ app.delete('/api/orders/:id', async (req, res) => {
 });
 
 export default app;
+
+// For Vercel serverless functions
+export { app as default };
