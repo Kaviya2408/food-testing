@@ -1,10 +1,8 @@
-console.log('Starting server...');
-
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
-const dbConfig = require('./database-config');
+const dbConfig = require('../database-config');
 
 const app = express();
 
@@ -16,12 +14,6 @@ app.use(cors({
 }));
 
 app.use(express.json());
-
-// Serve static files (HTML, CSS, JS, images)
-app.use(express.static(path.join(__dirname, 'public')));
-
-// MongoDB connection with cloud/local config
-const dbConfig = require('./database-config');
 
 // Order schema for MongoDB
 const orderSchema = new mongoose.Schema({
@@ -38,13 +30,51 @@ const orderSchema = new mongoose.Schema({
 
 const Order = mongoose.model('Order', orderSchema);
 
+// Connect to MongoDB and start server
+const uri = `mongodb+srv://${process.env.DB_USER || dbConfig.user}:${encodeURIComponent(process.env.DB_PASSWORD || dbConfig.password)}@${process.env.DB_HOST || dbConfig.host}/${process.env.DB_NAME || dbConfig.dbName}?retryWrites=true&w=majority`;
+
+mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => {
+    console.log('✅ MongoDB Atlas connected');
+    startServer();
+}).catch(err => {
+    console.error('❌ MongoDB connection failed:', err);
+});
+
 function startServer() {
-    // Root route - serve frontend
-    app.get('/', (req, res) => {
-        res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    // Health check endpoint
+    app.get('/health', (req, res) => {
+        res.status(200).json({ 
+            status: 'healthy',
+            timestamp: new Date().toISOString(),
+            env: process.env.NODE_ENV || 'development'
+        });
     });
 
-    app.post('/api/send-order', async (req, res) => {
+    // Test endpoint
+    app.get('/test', (req, res) => {
+        res.json({ 
+            message: 'API is working!',
+            timestamp: new Date().toISOString()
+        });
+    });
+
+    // Get all orders endpoint
+    app.get('/orders', async (req, res) => {
+        try {
+            const orders = await Order.find().sort({ created_at: -1 });
+            console.log(`📊 Admin panel: ${orders.length} orders found`);
+            res.json(orders);
+        } catch (err) {
+            console.error('❌ Error fetching orders:', err);
+            return res.status(500).json({ error: 'Database error' });
+        }
+    });
+
+    // Send order endpoint
+    app.post('/send-order', async (req, res) => {
         try {
             const { customerName, customerPhone, customerAddress, orderItems, subtotal, deliveryFee, total } = req.body;
             
@@ -77,20 +107,8 @@ function startServer() {
         }
     });
 
-    // Get all orders endpoint - handle both /orders and /orders/
-    app.get('/api/orders', async (req, res) => {
-        try {
-            const orders = await Order.find().sort({ created_at: -1 });
-            console.log(`📊 Admin panel: ${orders.length} orders found`);
-            res.json(orders);
-        } catch (err) {
-            console.error('❌ Error fetching orders:', err);
-            return res.status(500).json({ error: 'Database error' });
-        }
-    });
-
     // Clear all orders endpoint
-    app.delete('/api/clear-orders', async (req, res) => {
+    app.delete('/clear-orders', async (req, res) => {
         try {
             const result = await Order.deleteMany({});
             console.log(`✅ Cleared ${result.deletedCount} orders`);
@@ -105,48 +123,8 @@ function startServer() {
         }
     });
 
-    // Test endpoint to verify backend is working
-    app.get('/api/test', (req, res) => {
-        console.log('🧪 Test endpoint called');
-        res.json({ 
-            message: 'Backend is working!',
-            timestamp: new Date().toISOString()
-        });
-    });
-
-    // Health check endpoint for Vercel
-    app.get('/api/health', (req, res) => {
-        res.status(200).json({ 
-            status: 'healthy',
-            timestamp: new Date().toISOString(),
-            env: process.env.NODE_ENV || 'development',
-            message: 'Server is running and healthy'
-        });
-    });
-
-    // Debug endpoint to check database connection
-    app.get('/api/debug-db', async (req, res) => {
-        try {
-            console.log('🔍 Debug: Checking database connection...');
-            const count = await Order.countDocuments();
-            console.log('🔍 Total orders in DB:', count);
-            const all = await Order.find().limit(3);
-            console.log('🔍 Sample orders:', all);
-            res.json({ 
-                message: 'Database debug info',
-                totalOrders: count,
-                sampleOrders: all,
-                connection: 'Atlas'
-            });
-        } catch (err) {
-            console.error('🔍 Debug error:', err);
-            res.status(500).json({ error: err.message });
-        }
-    });
-
-    
     // Delete single order endpoint
-    app.delete('/api/orders/:id', async (req, res) => {
+    app.delete('/orders/:id', async (req, res) => {
         try {
             const orderId = req.params.id;
             
@@ -181,21 +159,8 @@ function startServer() {
 
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => {
-        console.log('⚠️ backend.js is now API-only - frontend served by Vercel');
-        console.log('⚠️ See /api/index.js for all API logic');
+        console.log(`🚀 API server running on port ${PORT}`);
     });
 }
 
-// Connect to MongoDB and start server
-const uri = `mongodb+srv://${process.env.DB_USER || dbConfig.user}:${encodeURIComponent(process.env.DB_PASSWORD || dbConfig.password)}@${process.env.DB_HOST || dbConfig.host}/${process.env.DB_NAME || dbConfig.dbName}?retryWrites=true&w=majority`;
-console.log('🔗 Connecting to MongoDB with URI:', uri);
-
-mongoose.connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => {
-    console.log('✅ MongoDB Atlas connected');
-    startServer();
-}).catch(err => {
-    console.error('❌ MongoDB connection failed:', err);
-});
+module.exports = app;
