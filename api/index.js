@@ -45,7 +45,7 @@ mongoose.connect(uri, {
 
 function startServer() {
     // Health check endpoint
-    app.get('/health', (req, res) => {
+    app.get('/api/health', (req, res) => {
         res.status(200).json({ 
             status: 'healthy',
             timestamp: new Date().toISOString(),
@@ -54,7 +54,7 @@ function startServer() {
     });
 
     // Test endpoint
-    app.get('/test', (req, res) => {
+    app.get('/api/test', (req, res) => {
         res.json({ 
             message: 'API is working!',
             timestamp: new Date().toISOString()
@@ -62,7 +62,7 @@ function startServer() {
     });
 
     // Get all orders endpoint
-    app.get('/orders', async (req, res) => {
+    app.get('/api/orders', async (req, res) => {
         try {
             const orders = await Order.find().sort({ created_at: -1 });
             console.log(`📊 Admin panel: ${orders.length} orders found`);
@@ -74,7 +74,7 @@ function startServer() {
     });
 
     // Send order endpoint
-    app.post('/send-order', async (req, res) => {
+    app.post('/api/send-order', async (req, res) => {
         try {
             const { customerName, customerPhone, customerAddress, orderItems, subtotal, deliveryFee, total } = req.body;
             
@@ -108,7 +108,7 @@ function startServer() {
     });
 
     // Clear all orders endpoint
-    app.delete('/clear-orders', async (req, res) => {
+    app.delete('/api/clear-orders', async (req, res) => {
         try {
             const result = await Order.deleteMany({});
             console.log(`✅ Cleared ${result.deletedCount} orders`);
@@ -124,7 +124,7 @@ function startServer() {
     });
 
     // Delete single order endpoint
-    app.delete('/orders/:id', async (req, res) => {
+    app.delete('/api/orders/:id', async (req, res) => {
         try {
             const orderId = req.params.id;
             
