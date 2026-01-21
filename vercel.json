@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "backend.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/backend.js"
+    }
+  ],
+  "env": {
+    "DB_HOST": "@mongodb_host",
+    "DB_USER": "@mongodb_user",
+    "DB_PASSWORD": "@mongodb_password",
+    "DB_NAME": "@mongodb_database"
+  }
+}
