@@ -8,30 +8,41 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 20px;
             background: #f8f9fa;
+            padding: 20px;
+            min-height: 100vh;
         }
 
         .admin-header {
             background: linear-gradient(135deg, #ff4500 0%, #ff6b35 100%);
             color: white;
-            padding: 20px;
-            border-radius: 10px;
+            padding: 30px 20px;
+            border-radius: 15px;
             text-align: center;
             margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(255, 69, 0, 0.2);
         }
 
         .admin-header h1 {
             margin: 0;
-            font-size: 28px;
+            font-size: 32px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
         .admin-header p {
             margin: 10px 0 0 0;
-            opacity: 0.9;
+            opacity: 0.95;
+            font-size: 16px;
+            font-weight: 300;
         }
 
         .orders-container {
@@ -41,58 +52,95 @@
 
         .order-card {
             background: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
             border-left: 5px solid #ff4500;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .order-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
         }
 
         .order-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
         }
 
         .order-id {
-            font-weight: bold;
+            font-weight: 600;
             color: #ff4500;
+            font-size: 20px;
         }
 
         .order-time {
             color: #666;
             font-size: 14px;
+            font-weight: 400;
         }
 
         .customer-info {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #e0e0e0;
         }
 
         .customer-info h3 {
-            margin: 0 0 10px 0;
+            margin: 0 0 15px 0;
             color: #333;
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .customer-info p {
+            margin: 8px 0;
+            color: #555;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .customer-info strong {
+            color: #333;
+            min-width: 80px;
+            display: inline-block;
         }
 
         .order-items {
             background: #fff;
-            padding: 15px;
-            border-radius: 8px;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #e0e0e0;
         }
 
         .order-items h4 {
-            margin: 0 0 10px 0;
+            margin: 0 0 15px 0;
             color: #333;
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .item {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
         }
 
         .item:last-child {
@@ -101,60 +149,130 @@
 
         .item-name {
             flex: 1;
-        }
-
-        .item-quantity {
-            color: #666;
-            font-size: 14px;
+            color: #333;
+            font-size: 15px;
+            font-weight: 500;
         }
 
         .item-price {
-            font-weight: bold;
+            font-weight: 600;
             color: #ff4500;
+            font-size: 16px;
+            min-width: 80px;
+            text-align: right;
         }
 
         .order-total {
-            background: #e9ecef;
-            padding: 15px;
-            border-radius: 8px;
+            background: linear-gradient(135deg, #ff4500 0%, #ff6b35 100%);
+            color: white;
+            padding: 18px 20px;
+            border-radius: 12px;
             text-align: right;
-            font-size: 18px;
-            font-weight: bold;
+            font-size: 20px;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(255, 69, 0, 0.2);
+            margin-bottom: 15px;
         }
 
-        .status-new {
-            background: #28a745;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            display: inline-block;
+        .delivered-checkbox {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-top: 15px;
+        }
+
+        .delivered-checkbox label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .delivered-checkbox label:hover {
+            background: #f8f9fa;
+        }
+
+        .delivered-checkbox input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .delivered-checkbox span {
+            font-size: 15px;
+            color: #333;
+            font-weight: 500;
         }
 
         .no-orders {
             text-align: center;
-            padding: 60px 20px;
+            padding: 80px 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .no-orders h3 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .no-orders p {
             color: #666;
+            font-size: 16px;
+            margin-bottom: 20px;
         }
 
         .refresh-btn {
-            background: #ff4500;
+            background: linear-gradient(135deg, #ff4500 0%, #ff6b35 100%);
             color: white;
             border: none;
-            padding: 12px 24px;
-            border-radius: 5px;
+            padding: 14px 30px;
+            border-radius: 10px;
             cursor: pointer;
             font-size: 16px;
+            font-weight: 600;
             margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(255, 69, 0, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .refresh-btn:hover {
-            background: #ff6b35;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 69, 0, 0.4);
         }
 
-        .delivered-checkbox {
-            margin-top: 15px;
-            text-align: right;
+        .refresh-btn:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .admin-header h1 {
+                font-size: 24px;
+            }
+
+            .order-card {
+                padding: 20px;
+            }
+
+            .order-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .customer-info strong {
+                min-width: 70px;
+            }
         }
     </style>
 </head>
@@ -173,7 +291,10 @@
     </div>
 
     <script>
-        const backendUrl = window.location.origin;
+        // Determine backend URL - use localhost:3000 for local development, or current origin for production
+        const backendUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+            ? 'http://localhost:3000' 
+            : window.location.origin;
 
         // Auto-refresh every 30 seconds
         setInterval(loadOrders, 30000);

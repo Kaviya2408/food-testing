@@ -398,26 +398,33 @@
                 return;
             }
             
-            // Send to backend server if running locally
-            if (window.location.hostname === 'localhost') {
-                try {
-                    fetch('http://10.23.240.23:3000/send-order', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(order)
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('Order sent to backend:', data);
-                    })
-                    .catch(error => {
-                        console.log('Backend error:', error);
-                    });
-                } catch (error) {
-                    console.log('Fetch failed:', error);
-                }
+            // Send to backend server (works both locally and on internet)
+            try {
+                // Use localhost:3000 for local development, or current origin for production
+                const backendUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+                    ? 'http://localhost:3000' 
+                    : window.location.origin;
+                    
+                fetch(`${backendUrl}/api/send-order`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(order)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Order sent to backend:', data);
+                    if (data.success) {
+                        console.log('✅ Order saved successfully with ID:', data.orderId);
+                    }
+                })
+                .catch(error => {
+                    console.error('Backend error:', error);
+                    alert('Order placed but there was an issue saving to database. Please contact support.');
+                });
+            } catch (error) {
+                console.error('Fetch failed:', error);
             }
             
             // Clear cart

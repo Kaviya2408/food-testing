@@ -1,3 +1,39 @@
 {
-  "version": 2
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/**/*.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/orders",
+      "dest": "/api/orders.js"
+    },
+    {
+      "src": "/api/send-order",
+      "dest": "/api/send-order.js"
+    },
+    {
+      "src": "/api/orders/(.*)",
+      "dest": "/api/delete-order.js"
+    },
+    {
+      "src": "/api/clear-orders",
+      "dest": "/api/clear-orders.js"
+    },
+    {
+      "src": "/api/test",
+      "dest": "/api/test.js"
+    },
+    {
+      "src": "/api/health",
+      "dest": "/api/health.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/$1"
+    }
+  ]
 }
